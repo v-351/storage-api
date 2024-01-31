@@ -1,0 +1,127 @@
+- name: КОГДА запрашивается товары 1го склада  ДОЛЖЕН успешно возвращаться
+  method: GET
+  status: ""
+  path: /warehouse/2/total
+
+  response:
+    200: | 
+      {
+        "placement": [
+          {
+            "product_id": 3,
+            "total": 100,
+            "reserved": 0
+          },
+          {
+            "product_id": 4,
+            "total": 100,
+            "reserved": 0
+          },
+          {
+            "product_id": 6,
+            "total": 100,
+            "reserved": 0
+          }
+        ]
+      }
+
+- name: КОГДА запрашивается товары 0го склада  ДОЛЖЕН bad request
+  method: GET
+  status: ""
+  path: /warehouse/0/total
+
+  response: 
+    400: ""
+
+- name: КОГДА запрашивается товары QWERTY склада  ДОЛЖЕН bad request
+  method: GET
+  status: ""
+  path: /warehouse/QWERTY/total
+
+  response: 
+    400: ""
+
+- name: КОГДА запрашивается товары QWERTY склада  ДОЛЖЕН bad request
+  method: GET
+  status: ""
+  path: /warehouse/QWERTY/total
+
+  response: 
+    400: ""
+
+
+- name: КОГДА резерв 1 меньше чем тотал  ДОЛЖЕН 201
+  method: POST
+  status: ""
+  path: /reserve
+
+  request: | 
+    {
+      "reserve_order": [
+        {
+          "product_id": 1,
+          "reserve_count": 1,
+          "warehouse_id": 1
+        }
+      ]
+    }
+
+  response: 
+    201: ""
+
+- name: КОГДА резерв 100 больше чем тотал  ДОЛЖЕН bad request
+  method: POST
+  status: ""
+  path: /reserve
+
+  request: | 
+    {
+      "reserve_order": [
+        {
+          "product_id": 1,
+          "reserve_count": 100,
+          "warehouse_id": 1
+        }
+      ]
+    }
+
+  response: 
+    400: ""
+
+- name: КОГДА освобождение резерва 1  ДОЛЖЕН 201
+  method: POST
+  status: ""
+  path: /release
+
+  request: | 
+    {
+      "reserve_order": [
+        {
+          "product_id": 1,
+          "reserve_count": 1,
+          "warehouse_id": 1
+        }
+      ]
+    }
+
+  response: 
+    201: ""
+
+- name: КОГДА освобождение резерва больше чем резерв  ДОЛЖЕН bad request
+  method: POST
+  status: ""
+  path: /release
+
+  request: | 
+    {
+      "reserve_order": [
+        {
+          "product_id": 1,
+          "reserve_count": 5,
+          "warehouse_id": 1
+        }
+      ]
+    }
+
+  response: 
+    400: ""

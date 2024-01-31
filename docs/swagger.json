@@ -1,0 +1,157 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Storage API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/release": {
+            "post": {
+                "description": "Снятие резервирования с товар на складе",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Снятие резерва товара",
+                "parameters": [
+                    {
+                        "description": "Список товаров для разрезервирования",
+                        "name": "reserveOrder",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.reserveOrderForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/reserve": {
+            "post": {
+                "description": "Зарезервировать товар на складе",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Зарезервирование товара",
+                "parameters": [
+                    {
+                        "description": "Список товаров для резервирования",
+                        "name": "reserveOrder",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.reserveOrderForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/warehouse/{warehouse_id}/total": {
+            "get": {
+                "description": "Получить содержимое склада по идентификатору",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Содержимое склада",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID Склада",
+                        "name": "warehouse_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.warehouseTotalResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "http.placement": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "reserved": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "http.reserveOrder": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "reserve_count": {
+                    "type": "integer"
+                },
+                "warehouse_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "http.reserveOrderForm": {
+            "type": "object",
+            "properties": {
+                "reserve_order": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/http.reserveOrder"
+                    }
+                }
+            }
+        },
+        "http.warehouseTotalResponse": {
+            "type": "object",
+            "properties": {
+                "placement": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/http.placement"
+                    }
+                }
+            }
+        }
+    }
+}

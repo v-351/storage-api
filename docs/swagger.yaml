@@ -1,0 +1,101 @@
+definitions:
+  http.placement:
+    properties:
+      product_id:
+        type: integer
+      reserved:
+        type: integer
+      total:
+        type: integer
+    type: object
+  http.reserveOrder:
+    properties:
+      product_id:
+        type: integer
+      reserve_count:
+        type: integer
+      warehouse_id:
+        type: integer
+    type: object
+  http.reserveOrderForm:
+    properties:
+      reserve_order:
+        items:
+          $ref: '#/definitions/http.reserveOrder'
+        type: array
+    type: object
+  http.warehouseTotalResponse:
+    properties:
+      placement:
+        items:
+          $ref: '#/definitions/http.placement'
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Storage API
+  version: "1.0"
+paths:
+  /release:
+    post:
+      consumes:
+      - application/json
+      description: Снятие резервирования с товар на складе
+      parameters:
+      - description: Список товаров для разрезервирования
+        in: body
+        name: reserveOrder
+        required: true
+        schema:
+          $ref: '#/definitions/http.reserveOrderForm'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Снятие резерва товара
+  /reserve:
+    post:
+      consumes:
+      - application/json
+      description: Зарезервировать товар на складе
+      parameters:
+      - description: Список товаров для резервирования
+        in: body
+        name: reserveOrder
+        required: true
+        schema:
+          $ref: '#/definitions/http.reserveOrderForm'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Зарезервирование товара
+  /warehouse/{warehouse_id}/total:
+    get:
+      description: Получить содержимое склада по идентификатору
+      parameters:
+      - description: ID Склада
+        in: path
+        name: warehouse_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.warehouseTotalResponse'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Содержимое склада
+swagger: "2.0"

@@ -1,0 +1,3 @@
+[submodule "gonkey"]
+	path = gonkey
+	url = https://github.com/lamoda/gonkey.git
